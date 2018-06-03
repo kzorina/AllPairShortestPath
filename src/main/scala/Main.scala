@@ -2,7 +2,7 @@ import MyUtils._
 import Array._
 
 object Main {
-  val nWorkers = 2 // power of 2
+  val nWorkers = 8 // power of 2
 
   def print_matrix(matrix: Array[Array[Int]]) = {
     for (i <- matrix.indices) {
@@ -82,14 +82,6 @@ object Main {
       val (up, down) = parallel(parallel_step(matrix, nWorkers / 2, (i_part._1, i_part._2 / 2), (j_part._1, j_part._2), k),
         parallel_step(matrix, nWorkers / 2, (i_part._2 / 2, i_part._2), (j_part._1, j_part._2),  k))
       up ++ down
-    case 4 =>
-      val (up1, up2, down1, down2) = parallel(
-        parallel_step(matrix, nWorkers / 4, (i_part._1, i_part._2 / 2), (j_part._1, j_part._2 / 2),  k),
-        parallel_step(matrix, nWorkers / 4, (i_part._1, i_part._2 / 2), (j_part._2 / 2, j_part._2),  k),
-        parallel_step(matrix, nWorkers / 4, (i_part._2 / 2, i_part._2), (j_part._1, j_part._2 / 2),  k),
-        parallel_step(matrix, nWorkers / 4, (i_part._2 / 2, i_part._2), (j_part._2 / 2,j_part._2),  k)
-      )
-      combine(matrix, up1, up2, down1, down2)
     case _ =>
       val (up1, up2, down1, down2) = parallel(
         parallel_step(matrix, nWorkers / 4, (i_part._1, i_part._2 / 2), (j_part._1, j_part._2 / 2),  k),
@@ -98,6 +90,7 @@ object Main {
         parallel_step(matrix, nWorkers / 4, (i_part._2 / 2, i_part._2), (j_part._2 / 2,j_part._2),  k)
       )
       combine(matrix, up1, up2, down1, down2)
+
   }
   def compute_shortest_path_par(input_matrix: Array[Array[Int]], nWorkers: Int): Array[Array[Int]] = {
     var matrix = input_matrix
